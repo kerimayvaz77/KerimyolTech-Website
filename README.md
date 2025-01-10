@@ -102,8 +102,8 @@ Uygulama başlatıldıktan sonra tarayıcınızda `http://localhost:5000` adresi
 ## 🤝 Destek ve İletişim
 
 Herhangi bir sorunuz veya öneriniz için:
-- 📧 E-posta: info@kerimyol.com
-- 🌐 Website: [www.kerimyol.com](http://www.kerimyol.com)
+- 📧 E-posta: kerimayvaz7@gmail.com
+- 🌐 Website: https://www.linkedin.com/in/kerim-ayvaz/
 
 ## 📝 Lisans
 
