@@ -1,0 +1,39 @@
+@{
+    ViewData["Title"] = "Şifremi Unuttum";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card mt-5">
+                <div class="card-header">
+                    <h3 class="text-center">Şifremi Unuttum</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="SifremiUnuttum" method="post">
+                        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+
+                        <div class="form-group mb-3">
+                            <label class="form-label">E-posta Adresi veya Kullanıcı Adı</label>
+                            <input type="text" name="kullaniciAdiVeyaEmail" class="form-control" required />
+                            <small class="form-text text-muted">E-posta adresinizi veya kullanıcı adınızı girin.</small>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-key"></i> Şifremi Sıfırla
+                            </button>
+                            <a asp-action="Giris" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left"></i> Giriş Sayfasına Dön
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

@@ -1,0 +1,54 @@
+@model IEnumerable<WebUygulama.Models.Kullanici>
+
+@{
+    ViewData["Title"] = "Kullanıcı Listesi";
+}
+
+<div class="container mt-4">
+    <h2>Kullanıcı Listesi</h2>
+    <div class="card mt-3">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Kullanıcı Adı</th>
+                            <th>E-posta</th>
+                            <th>Rol</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var kullanici in Model)
+                        {
+                            <tr>
+                                <td>@kullanici.Id</td>
+                                <td>@kullanici.KullaniciAdi</td>
+                                <td>@kullanici.Email</td>
+                                <td>@kullanici.Rol</td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a asp-action="KullaniciDetay" asp-route-id="@kullanici.Id" 
+                                           class="btn btn-info btn-sm">Detay</a>
+                                        <a asp-action="KullaniciDuzenle" asp-route-id="@kullanici.Id" 
+                                           class="btn btn-warning btn-sm">Düzenle</a>
+                                        @if (kullanici.Rol != "Admin")
+                                        {
+                                            <a asp-action="KullaniciSil" asp-route-id="@kullanici.Id" 
+                                               class="btn btn-danger btn-sm"
+                                               onclick="return confirm('Bu kullanıcıyı silmek istediğinize emin misiniz?')">Sil</a>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="mt-3">
+        <a asp-action="AdminPanel" class="btn btn-secondary">Admin Panele Dön</a>
+    </div>
+</div> 

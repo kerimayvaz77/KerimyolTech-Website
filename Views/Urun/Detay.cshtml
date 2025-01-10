@@ -1,0 +1,175 @@
+@model WebUygulama.Models.Urun
+
+@{
+    ViewData["Title"] = Model.Ad + " - Ürün Detayı";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="product-image-container">
+                    <img src="@Model.ResimUrl" class="product-image" alt="@Model.Ad">
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title">@Model.Ad</h4>
+                    <h5 class="text-primary mb-3">@Model.Fiyat.ToString("C2")</h5>
+                    <p class="card-text">@Model.Aciklama</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Ürün Detayları</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <dl class="row">
+                                <dt class="col-sm-4">Marka</dt>
+                                <dd class="col-sm-8">@(Model.Marka ?? "-")</dd>
+
+                                <dt class="col-sm-4">Model</dt>
+                                <dd class="col-sm-8">@(Model.Model ?? "-")</dd>
+
+                                <dt class="col-sm-4">Stok Durumu</dt>
+                                <dd class="col-sm-8">
+                                    @if (Model.StokMiktari > 0)
+                                    {
+                                        <span class="badge bg-success">Stokta Var (@Model.StokMiktari adet)</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">Stokta Yok</span>
+                                    }
+                                </dd>
+
+                                <dt class="col-sm-4">Garanti</dt>
+                                <dd class="col-sm-8">
+                                    @if (Model.GarantiSuresi.HasValue && Model.GarantiSuresi.Value > 0)
+                                    {
+                                        <span>@Model.GarantiSuresi ay</span>
+                                    }
+                                    else
+                                    {
+                                        <span>Garantisiz</span>
+                                    }
+                                </dd>
+                            </dl>
+                        </div>
+
+                        <div class="col-md-6">
+                            <dl class="row">
+                                <dt class="col-sm-4">Eklenme Tarihi</dt>
+                                <dd class="col-sm-8">@Model.EklenmeTarihi.ToString("dd.MM.yyyy HH:mm")</dd>
+
+                                @if (Model.GuncellemeTarihi.HasValue)
+                                {
+                                    <dt class="col-sm-4">Son Güncelleme</dt>
+                                    <dd class="col-sm-8">@Model.GuncellemeTarihi.Value.ToString("dd.MM.yyyy HH:mm")</dd>
+                                }
+                            </dl>
+                        </div>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.TeknikOzellikler))
+                    {
+                        <div class="mt-4">
+                            <h5>Teknik Özellikler</h5>
+                            <p class="mb-0" style="white-space: pre-line">@Model.TeknikOzellikler</p>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            @if (Context.Session.GetString("Rol") == "Admin")
+            {
+                <div class="admin-actions mt-3">
+                    <a asp-controller="Urun" asp-action="UrunDuzenle" asp-route-id="@Model.Id" 
+                       class="btn btn-outline-primary admin-btn">
+                        <i class="bi bi-pencil-square"></i> Düzenle
+                    </a>
+                    <button onclick="urunSil(@Model.Id)" 
+                            class="btn btn-outline-danger admin-btn">
+                        <i class="bi bi-trash3"></i> Sil
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .product-image-container {
+        height: 400px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f8f9fa;
+        border-bottom: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .product-image {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        padding: 15px;
+    }
+
+    .admin-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 20px;
+    }
+
+    .admin-btn {
+        padding: 8px 20px;
+        border-radius: 20px;
+        font-size: 1rem;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .admin-btn i {
+        font-size: 1.1rem;
+    }
+
+    .admin-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .btn-outline-primary:hover {
+        background: linear-gradient(135deg, #0d6efd, #0dcaf0);
+        border-color: transparent;
+        color: white;
+    }
+
+    .btn-outline-danger:hover {
+        background: linear-gradient(135deg, #dc3545, #ff6b6b);
+        border-color: transparent;
+        color: white;
+    }
+</style>
+
+<script>
+function urunSil(id) {
+    if (confirm('Bu ürünü silmek istediğinizden emin misiniz?')) {
+        fetch(`/Urun/UrunSil/${id}`, {
+            method: 'POST'
+        }).then(response => {
+            if (response.ok) {
+                window.location.href = '/Urun';
+            } else {
+                alert('Ürün silinirken bir hata oluştu.');
+            }
+        });
+    }
+}
+</script> 

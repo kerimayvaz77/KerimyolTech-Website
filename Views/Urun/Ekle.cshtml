@@ -1,0 +1,117 @@
+@model WebUygulama.Models.Urun
+
+@{
+    ViewData["Title"] = "Yeni Ürün Ekle";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Yeni Ürün Ekle</h4>
+                </div>
+                <div class="card-body">
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="alert alert-danger">
+                            <div asp-validation-summary="All" class="text-danger"></div>
+                        </div>
+                    }
+
+                    <form asp-action="Ekle" method="post" enctype="multipart/form-data">
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="text-center mb-3">
+                                    <img src="/urun-resimleri/default-product.png" alt="Ürün Resmi" class="img-fluid rounded" style="max-height: 200px;" id="urunResimOnizleme" />
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Ürün Fotoğrafı</label>
+                                    <input type="file" name="resimDosya" class="form-control" accept="image/*" onchange="resimOnizleme(this);" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Ad" class="form-label">Ürün Adı</label>
+                                    <input asp-for="Ad" class="form-control" required />
+                                    <span asp-validation-for="Ad" class="text-danger"></span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label asp-for="Marka" class="form-label">Marka</label>
+                                    <input asp-for="Marka" class="form-control" required />
+                                    <span asp-validation-for="Marka" class="text-danger"></span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label asp-for="Model" class="form-label">Model</label>
+                                    <input asp-for="Model" class="form-control" required />
+                                    <span asp-validation-for="Model" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Fiyat" class="form-label">Fiyat (₺)</label>
+                                    <input asp-for="Fiyat" class="form-control" type="number" step="0.01" required />
+                                    <span asp-validation-for="Fiyat" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="StokMiktari" class="form-label">Stok Miktarı</label>
+                                    <input asp-for="StokMiktari" class="form-control" type="number" required />
+                                    <span asp-validation-for="StokMiktari" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Aciklama" class="form-label">Ürün Açıklaması</label>
+                            <textarea asp-for="Aciklama" class="form-control" rows="3" required></textarea>
+                            <span asp-validation-for="Aciklama" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="TeknikOzellikler" class="form-label">Teknik Özellikler</label>
+                            <textarea asp-for="TeknikOzellikler" class="form-control" rows="3" required></textarea>
+                            <span asp-validation-for="TeknikOzellikler" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="GarantiSuresi" class="form-label">Garanti Süresi (Ay)</label>
+                            <input asp-for="GarantiSuresi" class="form-control" type="number" required />
+                            <span asp-validation-for="GarantiSuresi" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a asp-action="AdminPanel" asp-controller="Kullanici" class="btn btn-secondary me-md-2">
+                                <i class="bi bi-x-circle"></i> İptal
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-plus-circle"></i> Ürün Ekle
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        function resimOnizleme(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#urunResimOnizleme').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+} 

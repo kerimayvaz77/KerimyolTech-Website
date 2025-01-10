@@ -1,0 +1,378 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Kerimyol</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/WebUygulama.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                    <img src="~/images/logo.jpg" alt="Kerimyol Logo" height="40" class="d-inline-block align-top">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">Ana Sayfa</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Urun" asp-action="Index">Ürünler</a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        @if (Context.Session.GetString("KullaniciAdi") != null)
+                        {
+                            <li class="nav-item">
+                                <span class="nav-link">Hoş geldin, @Context.Session.GetString("KullaniciAdi")</span>
+                            </li>
+                            @if (Context.Session.GetString("Rol") == "Admin")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-warning" asp-controller="Kullanici" asp-action="AdminPanel">
+                                        <i class="bi bi-gear"></i> Admin Paneli
+                                    </a>
+                                </li>
+                            }
+                            <li class="nav-item">
+                                <a class="nav-link text-danger" asp-controller="Kullanici" asp-action="Cikis">
+                                    <i class="bi bi-box-arrow-right"></i> Çıkış Yap
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Kullanici" asp-action="Giris">
+                                    <i class="bi bi-box-arrow-in-right"></i> Giriş Yap
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Kullanici" asp-action="Kayit">
+                                    <i class="bi bi-person-plus"></i> Kayıt Ol
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container flex-grow-1">
+        <main role="main" class="mb-5">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="footer mt-auto py-2">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-4 d-flex align-items-center">
+                    <img src="~/images/logo.jpg" alt="Logo" height="45" class="me-3 rounded-circle shadow-sm">
+                    <div>
+                        <div class="footer-brand">
+                            <i class="bi bi-cpu-fill me-1"></i> Kerimyol Tech
+                        </div>
+                        <div class="footer-slogan">
+                            <i class="bi bi-stars me-1"></i> Teknoloji dünyasının öncüsü
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 text-center">
+                    <div class="d-flex justify-content-center gap-4">
+                        <a href="/" class="footer-link">
+                            <i class="bi bi-house-heart-fill"></i>
+                            <span>Ana Sayfa</span>
+                        </a>
+                        <a href="/Urun" class="footer-link">
+                            <i class="bi bi-box-seam-fill"></i>
+                            <span>Ürünler</span>
+                        </a>
+                        <a href="/Kullanici/Giris" class="footer-link">
+                            <i class="bi bi-person-heart"></i>
+                            <span>Hesap</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-4 text-end">
+                    <div class="footer-contact">
+                        <i class="bi bi-envelope-paper-heart-fill"></i>
+                        info@kerimyol.com
+                    </div>
+                    <div class="footer-copyright">
+                        <i class="bi bi-code-slash"></i> @DateTime.Now.Year 
+                        <span class="ms-1">Kerimyol <i class="bi bi-rocket-takeoff-fill"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <style>
+    /* Navbar Styles */
+    .navbar {
+        padding: 1rem 0;
+        background: rgba(255, 255, 255, 0.95) !important;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-brand img {
+        height: 50px;
+        transition: transform 0.3s ease;
+        border-radius: 8px;
+    }
+
+    @@media (max-width: 768px) {
+        .navbar-brand img {
+            height: 40px;
+        }
+    }
+
+    .navbar-brand img:hover {
+        transform: scale(1.05);
+    }
+
+    .nav-link {
+        position: relative;
+        margin: 0 0.5rem;
+        padding: 0.5rem 1rem !important;
+        font-weight: 500;
+        color: #2c3e50 !important;
+        transition: all 0.3s ease;
+        border-radius: 8px;
+    }
+
+    .nav-link::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(135deg, #1a2a6c, #b21f1f);
+        transition: all 0.3s ease;
+        transform: translateX(-50%);
+    }
+
+    .nav-link:hover {
+        color: #1a2a6c !important;
+        transform: translateY(-2px);
+    }
+
+    .nav-link:hover::after {
+        width: 80%;
+    }
+
+    .nav-link.text-warning {
+        color: #ffc107 !important;
+        background: rgba(255, 193, 7, 0.1);
+    }
+
+    .nav-link.text-warning:hover {
+        background: rgba(255, 193, 7, 0.2);
+    }
+
+    .nav-link.text-danger {
+        color: #dc3545 !important;
+        background: rgba(220, 53, 69, 0.1);
+    }
+
+    .nav-link.text-danger:hover {
+        background: rgba(220, 53, 69, 0.2);
+    }
+
+    .nav-link i {
+        margin-right: 5px;
+        transition: transform 0.3s ease;
+    }
+
+    .nav-link:hover i {
+        transform: scale(1.2);
+    }
+
+    .navbar-toggler {
+        border: none;
+        padding: 0.5rem;
+        border-radius: 8px;
+        background: rgba(0, 0, 0, 0.05);
+    }
+
+    .navbar-toggler:focus {
+        box-shadow: none;
+        outline: none;
+    }
+
+    @@media (max-width: 768px) {
+        .navbar-nav {
+            padding: 1rem 0;
+        }
+
+        .nav-link {
+            margin: 0.3rem 0;
+            text-align: center;
+        }
+
+        .nav-link::after {
+            display: none;
+        }
+    }
+
+    /* Footer Styles */
+    .footer {
+        background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.9rem;
+        position: relative;
+        width: 100%;
+        z-index: 10;
+        max-height: 100px;
+        overflow: hidden;
+    }
+
+    .footer .container {
+        padding: 0.5rem 0;
+    }
+
+    .footer-brand {
+        color: #fff;
+        font-weight: 600;
+        font-size: 1.1rem;
+        letter-spacing: 0.5px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        margin-bottom: 0;
+    }
+
+    .footer-slogan {
+        color: rgba(255, 255, 255, 0.95);
+        font-size: 0.8rem;
+        font-weight: 300;
+        letter-spacing: 0.3px;
+        margin-bottom: 0;
+    }
+
+    .footer-link {
+        color: #fff;
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.3rem;
+        font-weight: 400;
+        transition: all 0.3s ease;
+        padding: 0.5rem;
+    }
+
+    .footer-link i {
+        font-size: 1.2rem;
+    }
+
+    .footer-link span {
+        font-size: 0.8rem;
+        font-weight: 300;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+    }
+
+    .footer-link:hover {
+        color: #fdbb2d;
+        transform: translateY(-3px);
+    }
+
+    .footer-contact, .footer-copyright {
+        color: rgba(255, 255, 255, 0.95);
+        font-weight: 300;
+        letter-spacing: 0.3px;
+        line-height: 1.8;
+    }
+
+    .footer-contact i, .footer-copyright i {
+        color: #fdbb2d;
+        margin-right: 0.5rem;
+    }
+
+    .footer img {
+        transition: transform 0.3s ease;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .footer img:hover {
+        transform: scale(1.1) rotate(5deg);
+    }
+
+    @@media (max-width: 768px) {
+        .footer {
+            max-height: none;
+            text-align: center;
+            padding: 1.5rem 0;
+        }
+
+        .footer .row > div {
+            justify-content: center;
+            margin: 1rem 0;
+            width: 100%;
+        }
+        
+        .footer .text-end {
+            text-align: center !important;
+        }
+
+        .footer-link {
+            font-size: 0.9rem;
+            padding: 0.8rem;
+        }
+
+        .footer-brand {
+            font-size: 1.1rem;
+        }
+
+        .footer-slogan {
+            font-size: 0.8rem;
+        }
+
+        .footer .d-flex.gap-4 {
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem !important;
+        }
+
+        .footer img {
+            height: 30px;
+        }
+
+        .footer-contact, .footer-copyright {
+            margin: 0.3rem 0;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .footer {
+            padding: 1rem 0;
+        }
+
+        .footer .row > div {
+            margin: 0.5rem 0;
+        }
+
+        .footer-link {
+            padding: 0.5rem;
+        }
+    }
+    </style>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

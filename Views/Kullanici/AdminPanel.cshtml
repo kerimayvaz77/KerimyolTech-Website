@@ -1,0 +1,198 @@
+@{
+    ViewData["Title"] = "Admin Paneli";
+}
+
+<div class="container mb-5 pb-4">
+    <h2 class="text-center mb-4">Admin Paneli</h2>
+
+    <div class="row g-4">
+        <!-- Kullanıcı Yönetimi -->
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="card-title mb-0">
+                            <i class="bi bi-people-fill text-primary"></i>
+                            Kullanıcı Yönetimi
+                        </h5>
+                        <a href="/Kullanici/KullaniciListesi" class="btn btn-primary btn-sm">
+                            <i class="bi bi-list-ul"></i> Tüm Kullanıcı Listesi
+                        </a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Kullanıcı Adı</th>
+                                    <th>Email</th>
+                                    <th>Rol</th>
+                                    <th>İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var kullanici in ViewBag.Kullanicilar)
+                                {
+                                    <tr>
+                                        <td>@kullanici.KullaniciAdi</td>
+                                        <td>@kullanici.Email</td>
+                                        <td>@kullanici.Rol</td>
+                                        <td>
+                                            <a href="/Kullanici/KullaniciDuzenle/@kullanici.Id" class="btn btn-sm btn-primary">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+                                            <button onclick="kullaniciSil(@kullanici.Id)" class="btn btn-sm btn-danger">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ürün Yönetimi -->
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h2><i class="bi bi-box-seam"></i> Ürün Yönetimi</h2>
+                        <div>
+                            <a asp-controller="Urun" asp-action="Index" class="btn btn-info">
+                                <i class="bi bi-list"></i> Tüm Ürün Listesi
+                            </a>
+                            <a asp-controller="Urun" asp-action="Ekle" class="btn btn-success">
+                                <i class="bi bi-plus-circle"></i> Yeni Ürün
+                            </a>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Ürün Adı</th>
+                                    <th>Fiyat</th>
+                                    <th>Stok</th>
+                                    <th>İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var urun in ViewBag.Urunler)
+                                {
+                                    <tr>
+                                        <td>@urun.Ad</td>
+                                        <td>@urun.Fiyat.ToString("C")</td>
+                                        <td>@urun.StokMiktari</td>
+                                        <td>
+                                            <a href="/Urun/UrunDuzenle/@urun.Id" class="btn btn-sm btn-primary">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+                                            <button onclick="urunSil(@urun.Id)" class="btn btn-sm btn-danger">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.card {
+    border: none;
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+
+.table {
+    font-size: 0.9rem;
+}
+
+.table th {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    margin: 0 2px;
+}
+
+.btn-sm i {
+    font-size: 0.8rem;
+}
+
+.card-title {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.card-title i {
+    margin-right: 8px;
+}
+
+.table-responsive {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.table-responsive::-webkit-scrollbar {
+    width: 6px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+</style>
+
+<script>
+function kullaniciSil(id) {
+    if (confirm('Bu kullanıcıyı silmek istediğinizden emin misiniz?')) {
+        fetch(`/Kullanici/KullaniciSil/${id}`, {
+            method: 'POST'
+        }).then(response => {
+            if (response.ok) {
+                window.location.reload();
+            } else {
+                alert('Kullanıcı silinirken bir hata oluştu.');
+            }
+        });
+    }
+}
+
+function urunSil(id) {
+    if (confirm('Bu ürünü silmek istediğinizden emin misiniz?')) {
+        fetch(`/Urun/UrunSil/${id}`, {
+            method: 'POST'
+        }).then(response => {
+            if (response.ok) {
+                window.location.reload();
+            } else {
+                alert('Ürün silinirken bir hata oluştu.');
+            }
+        });
+    }
+}
+</script> 
